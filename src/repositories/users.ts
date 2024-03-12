@@ -4,6 +4,10 @@ import { UsersModel } from '../db/models/Users'
 import { v4 } from 'uuid'
 
 export class UsersRepository implements IUsersRepository {
+  // Fiz a implementação dessas 2 linhas:
+  update(id: string, User: NewUser): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   public async create(newUser: NewUser): Promise<User> {
     const id = v4()
     const user = await UsersModel.create({id, ...newUser})

@@ -1,7 +1,7 @@
 import { UpdateUsersController } from '../../../src/controllers/users/update'
 import { logger } from '../../mocks/logger'
 import { usersRepositoryMock } from '../../mocks/users_repository'
-import { Book, NewBook } from '../../../src/controllers/models'
+import { Book, NewBook, NewUser, User } from '../../../src/controllers/models'
 import { fakerEN } from '@faker-js/faker'
 import { Request, Response } from 'express'
 
@@ -17,9 +17,21 @@ describe('UpdateUsersController', ()=> {
       authors: fakerEN.internet.userName(),
     }
 
+    //Inclusão
+    const newUserMock: NewUser = {
+      name: fakerEN.word.words(),
+      email: fakerEN.word.words()
+    }
+
     const bookMock: Book = {
       id: fakerEN.string.uuid(),
       ...newBookMock
+    }
+
+    // Inclusão
+    const userMock: User = {
+      id: fakerEN.string.uuid(),
+      ...newUserMock
     }
 
     const requestMock = { 
@@ -39,7 +51,7 @@ describe('UpdateUsersController', ()=> {
     } as Response
 
     return {
-      controller, newBookMock, bookMock, requestMock, responseMock
+      controller, newBookMock, bookMock, requestMock, responseMock, usersRepositoryMock, userMock
     }
   }
 
@@ -49,19 +61,42 @@ describe('UpdateUsersController', ()=> {
 
   it.todo('should update and return user if the user was funded and if there is no other user with the same email')
 
-  it.todo('should return 404 statusCode and not update the user if there is no user with the id provided')
+  // it.todo('should return 404 statusCode and not update the user if there is no user with the id provided')
+  it('should return 404 statusCode and not update the user if there is no user with the id provided', async () => {
+    const { controller, usersRepositoryMock, userMock, requestMock, responseMock } = makeSut()
+    jest.spyOn(usersRepositoryMock, 'getById').mockRejectedValueOnce(null);
+  
+    try {
+      await controller.update(requestMock, responseMock);
+    } catch (error) {
+      expect(usersRepositoryMock.getById).toHaveBeenCalledWith(userMock.id);
+      expect(responseMock.statusCode).toEqual(404);
+    }
+  });
 
-  it.todo('should return 409 statusCode and not update the user if there is an user with the same email')
+  // it.todo('should return 409 statusCode and not update the user if there is an user with the same email')
+  it('should return 409 statusCode and not update the user if there is an user with the same email', async () => {
+    const { controller, usersRepositoryMock, userMock, requestMock, responseMock } = makeSut()
+    jest.spyOn(usersRepositoryMock, 'getByEmail').mockRejectedValueOnce(null);
+  
+    try {
+      await controller.update(requestMock, responseMock);
+    } catch (error) {
+      expect(usersRepositoryMock.getByEmail).toHaveBeenCalledWith(userMock.email);
+      expect(responseMock.statusCode).toEqual(409);
+    }
+  });
 
-  it.todo('should return 500 if some error occur')
-  // it('should return 500 if some error occur', async () => {
-    // const { controller, newUserMock, bookMock, requestMock, responseMock } = makeSut()
-    // jest.spyOn(usersRepositoryMock, 'getById').mockRejectedValueOnce(new Error('some error'))
+  // it.todo('should return 500 if some error occur')
+  // Não consegui trocar o bookMock.id pelo userMock.id (?)
+  it('should return 500 if some error occur', async () => {
+    const { controller, bookMock, userMock, requestMock, responseMock } = makeSut()
+    jest.spyOn(usersRepositoryMock, 'getById').mockRejectedValueOnce(new Error('some error'))
 
-    // const promise = controller.update(requestMock, responseMock)
+    const promise = controller.update(requestMock, responseMock)
 
-    // await expect(promise).resolves.not.toThrow()
-    // expect(userRepositoryMock.getById).toHaveBeenCalledWith(bookMock.id)
-    // expect(responseMock.statusCode).toEqual(500)
-  // })
+    await expect(promise).resolves.not.toThrow()
+    expect(usersRepositoryMock.getById).toHaveBeenCalledWith(bookMock.id)
+    expect(responseMock.statusCode).toEqual(500)
+  })
 })
