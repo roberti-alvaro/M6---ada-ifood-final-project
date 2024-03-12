@@ -97,6 +97,10 @@ export class BooksRentalRepository implements IBooksRentalRepository {
     }))
   }
 
+  public async update(id: string, book: NewBooksRental): Promise<void> {
+    await BooksRentalModel.update({ ...book }, { where: { id } })
+  }
+
   public async delete(id: string): Promise<void> {
     await BooksRentalModel.destroy({ where: { id }})
   }
