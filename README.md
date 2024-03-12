@@ -6,7 +6,7 @@
 - [Get Started](#get-started)
 - [HTTP API Endpoints](#http-api-endpoints)
 
-### Instruções sobre o trabalho
+### Instruções sobre o trabalho 
 
 Será disponibilizado para os alunos um projeto em Typescript, esse projeto é uma API HTTP para auxiliar na gestão da biblioteca municipal da cidade, contendo alguns recursos para ajudar as bibliotecárias na gestão dos livros e no empréstimo dos livros.
 
