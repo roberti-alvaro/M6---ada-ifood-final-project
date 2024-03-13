@@ -6,11 +6,11 @@ import { fakerEN } from '@faker-js/faker'
 import { Request, Response } from 'express'
 import { booksRepositoryMock } from '../../mocks/books_repository'
 
-describe('UpdateBooksRentalController', ()=> {
+describe('UpdateBooksRentalController', () => {
 
   function makeSut() {
     const controller = new UpdateBooksRentalController(logger, booksRentalRepositoryMock)
-    
+
     const newBooksRentalMock: NewBooksRental = {
       book_id: fakerEN.string.uuid(),
       user_id: fakerEN.string.uuid(),
@@ -23,7 +23,7 @@ describe('UpdateBooksRentalController', ()=> {
       ...newBooksRentalMock
     }
 
-    const requestMock = { 
+    const requestMock = {
       body: newBooksRentalMock,
       params: { id: booksRentalMock.id } as any,
     } as Request
@@ -48,7 +48,6 @@ describe('UpdateBooksRentalController', ()=> {
     jest.clearAllMocks()
   })
 
-  // it.todo('should update and return book rental if the book rental exist')
   it('should update and return book rental if the book rental exist', async () => {
     const { controller, booksRentalMock, requestMock, responseMock } = makeSut()
     jest.spyOn(booksRentalRepositoryMock, 'getById').mockResolvedValueOnce(booksRentalMock)
@@ -61,11 +60,10 @@ describe('UpdateBooksRentalController', ()=> {
     expect(responseMock.statusCode).toEqual(200)
   })
 
-  // it.todo('should return 404 statusCode and not update the book rental if there is no rental with the id provided')
   it('should return 404 statusCode and not update the book rental if there is no rental with the id provided', async () => {
     const { controller, booksRentalMock, requestMock, responseMock } = makeSut()
     jest.spyOn(booksRentalRepositoryMock, 'getById').mockRejectedValueOnce(null);
-  
+
     try {
       await controller.update(requestMock, responseMock);
     } catch (error) {
@@ -74,11 +72,10 @@ describe('UpdateBooksRentalController', ()=> {
     }
   });
 
-  // it.todo('should return 409 statusCode and not update the book rental if there is a rental with the same book id')
   it('should return 409 statusCode and not update the book rental if there is a rental with the same book id', async () => {
-    const { controller, booksRentalMock , requestMock, responseMock } = makeSut()
+    const { controller, booksRentalMock, requestMock, responseMock } = makeSut()
     jest.spyOn(booksRentalRepositoryMock, 'getById').mockRejectedValueOnce(null);
-  
+
     try {
       await controller.update(requestMock, responseMock);
     } catch (error) {
@@ -87,9 +84,8 @@ describe('UpdateBooksRentalController', ()=> {
     }
   });
 
-  // it.todo('should return 500 if some error occur')
   it('should return 500 if some error occur', async () => {
-    const { controller, booksRentalMock , requestMock, responseMock } = makeSut()
+    const { controller, booksRentalMock, requestMock, responseMock } = makeSut()
     jest.spyOn(booksRentalRepositoryMock, 'getById').mockRejectedValueOnce(new Error('some error'))
 
     const promise = controller.update(requestMock, responseMock)

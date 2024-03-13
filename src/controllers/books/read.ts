@@ -22,7 +22,7 @@ export class ReadBooksController {
       return
     }catch(err){ 
       this.logger.error({ message: 'error to read book', error: err })
-      res.status(500).json({ message: 'something went wrong, try again latter!' })
+      res.status(500).json({ message: 'something went wrong, try again later!' })
       return
     }
   }
@@ -34,7 +34,7 @@ export class ReadBooksController {
       return
     }catch(err){ 
       this.logger.error({ message: 'error to read book', error: err })
-      res.status(500).json({ message: 'something went wrong, try again latter!' })
+      res.status(500).json({ message: 'something went wrong, try again later!' })
       return
     }
   }
