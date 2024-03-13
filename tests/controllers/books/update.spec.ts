@@ -59,7 +59,6 @@ describe('UpdateBooksController', ()=> {
     expect(responseMock.statusCode).toEqual(200)
   })
 
-  // it.todo('should return 404 statusCode and not update the book if there is no book with the id provided')
   it('should return 404 statusCode and not update the book if there is no book with the id provided', async () => {
     const { controller, bookMock, requestMock, responseMock } = makeSut()
     jest.spyOn(booksRepositoryMock, 'getById').mockRejectedValueOnce(null);
@@ -72,8 +71,6 @@ describe('UpdateBooksController', ()=> {
     }
   });
   
-
-  // it.todo('should return 409 statusCode and not update the book if there is a book with the same title')
   it('should return 409 statusCode and not update the book if there is a book with the same title', async () => {
     const { controller, bookMock, requestMock, responseMock } = makeSut()
     jest.spyOn(booksRepositoryMock, 'getByTitle').mockRejectedValueOnce(null);

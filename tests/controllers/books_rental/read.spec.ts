@@ -66,7 +66,6 @@ describe('ReadBooksRentalController', ()=> {
 
       await expect(promise).resolves.not.toThrow()
       expect(booksRentalRepositoryMock.getById).toHaveBeenCalledWith(booksRentalMock.id)
-      //  expect(booksRentalRepositoryMock.getById).toHaveBeenCalledTimes(2)
       expect(responseMock.statusCode).toEqual(204)
     })
 
@@ -84,8 +83,26 @@ describe('ReadBooksRentalController', ()=> {
   })
 
   describe('list', () => {
-    it.todo('should return the list of books rental')
+    it('should return the list of books rental', async () => {
+      const { controller, requestMock, responseMock, booksRentalMock } = makeSut()
+      jest.spyOn(booksRentalRepositoryMock, 'list').mockResolvedValueOnce([booksRentalMock])
 
-    it.todo('should return 500 if some error occur')
+      const promise = controller.list(requestMock, responseMock)
+
+      await expect(promise).resolves.not.toThrow()
+      expect(booksRentalRepositoryMock.list).toHaveBeenCalled()
+      expect(responseMock.statusCode).toEqual(200)
+    })
+
+    it('should return 500 if some error occur', async () => {
+      const { controller, requestMock, responseMock } = makeSut()
+      jest.spyOn(booksRentalRepositoryMock, 'list').mockRejectedValueOnce(new Error('some error'))
+
+      const promise = controller.list(requestMock, responseMock)
+
+      await expect(promise).resolves.not.toThrow()
+      expect(booksRentalRepositoryMock.list).toHaveBeenCalled()
+      expect(responseMock.statusCode).toEqual(500)
+    })
   })
 })

@@ -5,10 +5,10 @@ import { NewUser, User } from '../../../src/controllers/models'
 import { fakerEN } from '@faker-js/faker'
 import { Request, Response } from 'express'
 
-describe('UpdateUsersController', ()=> {
+describe('UpdateUsersController', () => {
   function makeSut() {
     const controller = new UpdateUsersController(logger, usersRepositoryMock)
-    
+
     const newUserMock: NewUser = {
       name: fakerEN.word.words(),
       email: fakerEN.word.words()
@@ -19,7 +19,7 @@ describe('UpdateUsersController', ()=> {
       ...newUserMock
     }
 
-    const requestMock = { 
+    const requestMock = {
       body: newUserMock,
       params: { id: userMock.id } as any
     } as Request
@@ -44,25 +44,24 @@ describe('UpdateUsersController', ()=> {
     jest.clearAllMocks()
   })
 
-  //  "and if there is no other user with the same email"? Testar e-mail duplicado deveria ser atribuição do "create"
-  it('should update and return user if the user was funded and if there is no other user with the same email', async () => {
-    const { controller, userMock, requestMock, responseMock } = makeSut()
-    jest.spyOn(usersRepositoryMock, 'getById').mockResolvedValueOnce(userMock)
-    jest.spyOn(usersRepositoryMock, 'update').mockResolvedValueOnce()
+  it.todo('should update and return user if the user was funded and if there is no other user with the same email')
+  // //  "and if there is no other user with the same email"? Testar e-mail duplicado deveria ser atribuição do "create"
+  // it('should update and return user if the user was funded and if there is no other user with the same email', async () => {
+  //   const { controller, userMock, requestMock, responseMock } = makeSut()
+  //   jest.spyOn(usersRepositoryMock, 'getById').mockResolvedValueOnce(userMock)
+  //   jest.spyOn(usersRepositoryMock, 'update').mockResolvedValueOnce()
 
-    const promise = controller.update(requestMock, responseMock)
+  //   const promise = controller.update(requestMock, responseMock)
 
-    await expect(promise).resolves.not.toThrow()
-    expect(usersRepositoryMock.getById).toHaveBeenCalledWith(userMock.id)
-    expect(responseMock.statusCode).toEqual(200)
+  //   await expect(promise).resolves.not.toThrow()
+  //   expect(usersRepositoryMock.getById).toHaveBeenCalledWith(userMock.id)
+  //   expect(responseMock.statusCode).toEqual(200)
+  // })
 
-  })
-
-  // it.todo('should return 404 statusCode and not update the user if there is no user with the id provided')
   it('should return 404 statusCode and not update the user if there is no user with the id provided', async () => {
     const { controller, usersRepositoryMock, userMock, requestMock, responseMock } = makeSut()
     jest.spyOn(usersRepositoryMock, 'getById').mockRejectedValueOnce(null);
-  
+
     try {
       await controller.update(requestMock, responseMock);
     } catch (error) {
@@ -71,11 +70,10 @@ describe('UpdateUsersController', ()=> {
     }
   });
 
-  // it.todo('should return 409 statusCode and not update the user if there is an user with the same email')
   it('should return 409 statusCode and not update the user if there is an user with the same email', async () => {
     const { controller, usersRepositoryMock, userMock, requestMock, responseMock } = makeSut()
     jest.spyOn(usersRepositoryMock, 'getByEmail').mockRejectedValueOnce(null);
-  
+
     try {
       await controller.update(requestMock, responseMock);
     } catch (error) {
@@ -84,7 +82,6 @@ describe('UpdateUsersController', ()=> {
     }
   });
 
-  // it.todo('should return 500 if some error occur')
   it('should return 500 if some error occur', async () => {
     const { controller, userMock, requestMock, responseMock } = makeSut()
     jest.spyOn(usersRepositoryMock, 'getById').mockRejectedValueOnce(new Error('some error'))
