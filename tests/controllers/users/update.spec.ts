@@ -45,7 +45,6 @@ describe('UpdateUsersController', () => {
   })
 
   
-  // //  "and if there is no other user with the same email"? Testar e-mail duplicado deveria ser atribuição do "create"
   it('should update and return user if the user was funded and if there is no other user with the same email', async () => {
     const { controller, userMock, requestMock, responseMock } = makeSut()
     jest.spyOn(usersRepositoryMock, 'getById').mockResolvedValueOnce(userMock)
